@@ -1,0 +1,71 @@
+.credits-line {
+    fill: none;
+    stroke: green;
+    stroke-width: 2px;
+}
+.credits-line-circle {
+    fill: white;
+    stroke: green;
+    stroke-width: 2px;
+}
+.credits-line-circle-selected {
+    fill: green;
+    stroke: green;
+    stroke-width: 2px;
+}
+.leasing-line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 2px;
+}
+.leasing-line-circle {
+    fill: white;
+    stroke: steelblue;
+    stroke-width: 2px;
+}
+.factoring-line {
+    fill: none;
+    stroke: orange;
+    stroke-width: 2px;
+}
+.factoring-line-circle {
+    fill: white;
+    stroke: orange;
+    stroke-width: 2px;
+}
+.axis-y path {
+    display: none;
+}
+.axis-y-right text {
+    display: none;
+}
+.tick line {
+    display: none;
+}
+.grid line {
+    display: block;
+}
+.line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 2px;
+}
+.grid line {
+    stroke: lightgrey;
+    stroke-opacity: 0.7;
+    shape-rendering: crispEdges;
+}
+.grid path {
+    stroke-width: 0;
+}
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    background: grey;
+    color: white;
+    border: 1px;
+    border-radius: 8px;
+    width: 60px;
+}
