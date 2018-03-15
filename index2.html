@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+    .creditsLine {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 2px;
+    }
+    .leasingLine {
+        fill: none;
+        stroke: green;
+        stroke-width: 2px;
+    }
+    .factoringLine {
+        fill: none;
+        stroke: red;
+        stroke-width: 2px;
+    }
+    .axis-y path {
+        display: none;
+    }
+    .axis-y-right text {
+        display: none;
+    }
+    .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 2px;
+    }
+    .grid line {
+        stroke: lightgrey;
+        stroke-opacity: 0.7;
+        shape-rendering: crispEdges;
+    }
+    .grid path {
+        stroke-width: 0;
+    }
+</style>
+<body>
+    <!-- load the d3.js library -->    	
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script>
+
+        // set the dimensions and margins of the graph
+        var margin = {top: 50, right: 20, bottom: 30, left: 80},
+        width = 960 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
+
+        // set the ranges
+        var x = d3.scaleLinear().range([0, width]);
+        var y = d3.scaleLinear().range([height, 0]);
+
+        // define the line
+        var creditsLine = d3.line()
+            .x(function(d) { return x(d.date); })
+            .y(function(d) { return y(d.credits); });
+        // define the line
+        var leasingLine = d3.line()
+            .x(function(d) { return x(d.date); })
+            .y(function(d) { return y(d.leasing); });
+        // define the line
+        var factoringLine = d3.line()
+            .x(function(d) { return x(d.date); })
+            .y(function(d) { return y(d.factoring); });
+
+        // append the svg obgect to the body of the page
+        // appends a 'group' element to 'svg'
+        // moves the 'group' element to the top left margin
+        var svg = d3.select("body")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        // gridlines in x axis function
+        function make_x_gridlines() {		
+            return d3.axisBottom(x)
+                .ticks(20)
+        }
+
+        // gridlines in y axis function
+        function make_y_gridlines() {		
+            return d3.axisLeft(y)
+                .ticks(5)
+        }
+        
+        function draw(data, country) {
+
+            var data = data[country];
+
+            // format the data
+            data.forEach(function(d) {
+                d.date = +d.date;
+                d.credits = +d.credits;
+                d.leasing = +d.leasing;
+                d.factoring = +d.factoring;
+            });
+
+            // Scale the range of the data
+            x.domain(d3.extent(data, function(d) { return d.date; }));
+            y.domain([0, d3.max(data, function(d) {
+                return Math.max(d.credits, d.leasing, d.factoring); })]);
+
+            // add the X gridlines
+            svg.append("g")			
+                .attr("class", "grid")
+                .attr("transform", "translate(0," + height + ")")
+                .call(make_x_gridlines()
+                    .tickSize(-height)
+                    .tickFormat("")
+                )
+
+            // add the Y gridlines
+            svg.append("g")			
+                .attr("class", "grid")
+                .call(make_y_gridlines()
+                    .tickSize(-width)
+                    .tickFormat("")
+                )
+
+            // Add the creditsLine path.
+            svg.append("path")
+                .data([data])
+                .attr("class", "creditsLine")
+                .attr("d", creditsLine);
+            // Add the leasingLine path.
+            svg.append("path")
+                .data([data])
+                .attr("class", "leasingLine")
+                .attr("d", leasingLine);
+            // Add the factoringLine path.
+            svg.append("path")
+                .data([data])
+                .attr("class", "factoringLine")
+                .attr("d", factoringLine); 
+
+            // Add the X Axis
+            svg.append("g")
+                .attr("class", "axis-x")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x))
+               .append("text")
+                .attr("y", "1.5em")
+                .attr("dx", "-3em")
+                .attr("fill", "#000")
+                .text("Nr tyg.");
+            // Add the left Y Axis
+            svg.append("g")
+                .attr("class", "axis-y")
+                .call(d3.axisLeft(y))
+               .append("text")
+                .attr("y", "-2em")
+                .attr("dx", "3em")
+                .attr("fill", "#000")
+                .text("Wolumen (tys. PLN)");
+            // Add the right Y Axis
+            svg.append("g")
+                .attr("class", "axis-y-right")
+                .attr("transform", "translate(" + width + " ,0)")
+                .attr("fill", "#000")
+                .call(d3.axisRight(y))
+        }
+        // Get the data
+        d3.json("data.json", function(error, data) {
+        if (error) throw error;
+
+        // trigger render
+        draw(data, "Volume");
+        });
+
+    </script>
+</body>

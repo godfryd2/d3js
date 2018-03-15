@@ -1,0 +1,166 @@
+{
+   "Volume": [
+      {
+         "date": "26",
+         "credits": "300",
+         "leasing": "350",
+         "factoring": "180"
+      },
+      {
+         "date": "27",
+         "credits": "220",
+         "leasing": "390",
+         "factoring": "185"
+      },
+      {
+         "date": "28",
+         "credits": "160",
+         "leasing": "450",
+         "factoring": "240"
+      },
+      {
+         "date": "29",
+         "credits": "200",
+         "leasing": "480",
+         "factoring": "270"
+      },
+      {
+         "date": "30",
+         "credits": "260",
+         "leasing": "430",
+         "factoring": "385"
+      },
+      {
+         "date": "31",
+         "credits": "340",
+         "leasing": "470",
+         "factoring": "420"
+      },
+      {
+         "date": "32",
+         "credits": "450",
+         "leasing": "410",
+         "factoring": "520"
+      },
+      {
+         "date": "33",
+         "credits": "510",
+         "leasing": "480",
+         "factoring": "410"
+      },
+      {
+         "date": "34",
+         "credits": "445",
+         "leasing": "390",
+         "factoring": "310"
+      },
+      {
+         "date": "35",
+         "credits": "280",
+         "leasing": "520",
+         "factoring": "320"
+      },
+      {
+         "date": "36",
+         "credits": "245",
+         "leasing": "450",
+         "factoring": "180"
+      },
+      {
+         "date": "37",
+         "credits": "295",
+         "leasing": "530",
+         "factoring": "200"
+      },
+      {
+         "date": "38",
+         "credits": "200",
+         "leasing": "370",
+         "factoring": "280"
+      },
+      {
+         "date": "39",
+         "credits": "300",
+         "leasing": "405",
+         "factoring": "210"
+      },
+      {
+         "date": "40",
+         "credits": "380",
+         "leasing": "490",
+         "factoring": "250"
+      },
+      {
+         "date": "41",
+         "credits": "350",
+         "leasing": "600",
+         "factoring": "150"
+      },
+      {
+         "date": "42",
+         "credits": "390",
+         "leasing": "560",
+         "factoring": "180"
+      },
+      {
+         "date": "43",
+         "credits": "450",
+         "leasing": "570",
+         "factoring": "260"
+      },
+      {
+         "date": "44",
+         "credits": "480",
+         "leasing": "530",
+         "factoring": "385"
+      },
+      {
+         "date": "45",
+         "credits": "435",
+         "leasing": "510",
+         "factoring": "320"
+      },
+      {
+         "date": "46",
+         "credits": "310",
+         "leasing": "520",
+         "factoring": "390"
+      },
+      {
+         "date": "47",
+         "credits": "245",
+         "leasing": "485",
+         "factoring": "310"
+      },
+      {
+         "date": "48",
+         "credits": "190",
+         "leasing": "495",
+         "factoring": "260"
+      },
+      {
+         "date": "49",
+         "credits": "210",
+         "leasing": "455",
+         "factoring": "280"
+      },
+      {
+         "date": "50",
+         "credits": "195",
+         "leasing": "470",
+         "factoring": "240"
+      },
+      {
+         "date": "51",
+         "credits": "290",
+         "leasing": "460",
+         "factoring": "185"
+      },
+      {
+         "date": "52",
+         "credits": "280",
+         "leasing": "490",
+         "factoring": "150"
+      }
+   ]
+}
