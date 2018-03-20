@@ -9,7 +9,7 @@
     <script>
 
         // set the dimensions and margins of the graph
-        var margin = {top: 50, right: 20, bottom: 30, left: 80},
+        var margin = {top: 50, right: 20, bottom: 80, left: 80},
         width = 960 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
@@ -196,6 +196,45 @@
                     tooltip.style("display", "none"); 
                     d3.event.target.style.fill = "white";
                 });
+
+            // Add the credits Legend
+            svg.append("circle")
+                .attr("class", "credits-line-circle")
+                .attr("r", width / 150)
+                .attr("cx", (width / 3) - (width / 6))
+                .attr("cy", height + margin.bottom / 2)
+            svg.append("text")
+                .attr("x", (width / 3) - (width / 6) + 10)  // space legend
+                .attr("y", height + margin.bottom / 2 + 5)
+                .attr("class", "credits-legend-text")    // style the legend
+                .style("fill", "green")   // Add the colours dynamically
+                .text("Kredyty");
+
+            // Add the leasing Legend
+            svg.append("circle")
+                .attr("class", "leasing-line-circle")
+                .attr("r", width / 150)
+                .attr("cx", (width / 3)*2 - (width / 6))
+                .attr("cy", height + margin.bottom / 2)
+            svg.append("text")
+                .attr("x", (width / 3)*2 - (width / 6) + 10)  // space legend
+                .attr("y", height + margin.bottom / 2 + 5)
+                .attr("class", "leasing-legend-text")    // style the legend
+                .style("fill", "steelblue")   // Add the colours dynamically
+                .text("Leasing");
+
+            // Add the factoring Legend
+            svg.append("circle")
+                .attr("class", "factoring-line-circle")
+                .attr("r", width / 150)
+                .attr("cx", (width / 3)*3 - (width / 6))
+                .attr("cy", height + margin.bottom / 2)
+            svg.append("text")
+                .attr("x", (width / 3)*3 - (width / 6) + 10)  // space legend
+                .attr("y", height + margin.bottom / 2 + 5)
+                .attr("class", "factoring-legend-text")    // style the legend
+                .style("fill", "orange")   // Add the colours dynamically
+                .text("Factoring");
         }
         // Get the data
         d3.json("data.json", function(error, data) {

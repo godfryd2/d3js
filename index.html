@@ -1,175 +1,116 @@
-
-Popular / About
-Will’s Block 76ae20060e19bf42d774
-Updated August 29, 2015
-D3 Mouse Events
-Open
-index.html
-#
-
 <!DOCTYPE html>
-<!-- How to create Mouse Events for D3 -->
-<html>
+<meta charset="utf-8">
+<style> /* set the CSS */
 
-  <head>
-    <!-- Load D3 from site -->
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+body { font: 12px Arial;}
 
-    <!-- CSS (Styling) -->
-    <style type="text/css">
+path { 
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none;
+}
 
-      body {
-        margin: 0;
-        font-family: sans-serif;
-        font-size: 11px;
-      }
+.axis path,
+.axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
 
-      .axis path, .axis line {
-        fill: none;
-        stroke: black;
-        shape-rendering: crispEdges;  /* Round any decimal pixels so it'll render nicely */
-      }
+.legend {
+    font-size: 16px;
+    font-weight: bold;
+    text-anchor: middle;
+}
 
-      /*
-      //Can use CSS3 Transitions, but not for everything (e.g. change radius size)
-      circle:hover{
-        fill: green;
-      }
-      */
+</style>
+<body>
 
-    </style>
-  </head>
+<!-- load the d3.js library -->    
+<script src="https://d3js.org/d3.v4.min.js"></script>
 
-  <body>
-    <!-- Begin Javascript -->
-    <script type="text/javascript">
-      var w = window.innerWidth,
-          h = window.innerHeight,
-          margin = { top: 40, right: 20, bottom: 20, left: 40 },
-          radius = 6;
+<script>
 
-      var svg = d3.select("body").append("svg").attr({
-        width: w,
-        height: h
-      });
+// Set the dimensions of the canvas / graph
+var margin = {top: 30, right: 20, bottom: 70, left: 50},
+    width = 600 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
 
-      var dataset = [
-        { x: 100, y: 110 },
-        { x: 83, y: 43 },
-        { x: 92, y: 28 },
-        { x: 49, y: 74 },
-        { x: 51, y: 10 },
-        { x: 25, y: 98 },
-        { x: 77, y: 30 },
-        { x: 20, y: 83 },
-        { x: 11, y: 63 },
-        { x:  4, y: 55 },
-        { x:  0, y:  0 },
-        { x: 85, y: 100 },
-        { x: 60, y: 40 },
-        { x: 70, y: 80 },
-        { x: 10, y: 20 },
-        { x: 40, y: 50 },
-        { x: 25, y: 31 }
-      ];
+// Parse the date / time
+var parseDate = d3.timeParse("%b %Y");
 
-      // We're passing in a function in d3.max to tell it what we're maxing (x value)
-      var xScale = d3.scale.linear()
-          .domain([0, d3.max(dataset, function (d) { return d.x + 10; })])
-          .range([margin.left, w - margin.right]);  // Set margins for x specific
+// Set the ranges
+var x = d3.scaleTime().range([0, width]);  
+var y = d3.scaleLinear().range([height, 0]);
 
-      // We're passing in a function in d3.max to tell it what we're maxing (y value)
-      var yScale = d3.scale.linear()
-          .domain([0, d3.max(dataset, function (d) { return d.y + 10; })])
-          .range([margin.top, h - margin.bottom]);  // Set margins for y specific
+// Define the line
+var priceline = d3.line()	
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.price); });
+    
+// Adds the svg canvas
+var svg = d3.select("body")
+    .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+        .attr("transform", 
+              "translate(" + margin.left + "," + margin.top + ")");
 
-      // Add a X and Y Axis (Note: orient means the direction that ticks go, not position)
-      var xAxis = d3.svg.axis().scale(xScale).orient("top");
-      var yAxis = d3.svg.axis().scale(yScale).orient("left");
+// Get the data
+d3.csv("stocks.csv", function(error, data) {
+    data.forEach(function(d) {
+		d.date = parseDate(d.date);
+		d.price = +d.price;
+    });
 
-      var circleAttrs = {
-          cx: function(d) { return xScale(d.x); },
-          cy: function(d) { return yScale(d.y); },
-          r: radius
-      };
+    // Scale the range of the data
+    x.domain(d3.extent(data, function(d) { return d.date; }));
+    y.domain([0, d3.max(data, function(d) { return d.price; })]);
 
+    // Nest the entries by symbol
+    var dataNest = d3.nest()
+        .key(function(d) {return d.symbol;})
+        .entries(data);
 
-      // Adds X-Axis as a 'g' element
-      svg.append("g").attr({
-        "class": "axis",  // Give class so we can style it
-        transform: "translate(" + [0, margin.top] + ")"  // Translate just moves it down into position (or will be on top)
-      }).call(xAxis);  // Call the xAxis function on the group
+    // set the colour scale
+    var color = d3.scaleOrdinal(d3.schemeCategory10);
 
-      // Adds Y-Axis as a 'g' element
-      svg.append("g").attr({
-        "class": "axis",
-        transform: "translate(" + [margin.left, 0] + ")"
-      }).call(yAxis);  // Call the yAxis function on the group
+    legendSpace = width/dataNest.length; // spacing for the legend
 
-      svg.selectAll("circle")
-          .data(dataset)
-          .enter()
-          .append("circle")
-          .attr(circleAttrs)  // Get attributes from circleAttrs var
-          .on("mouseover", handleMouseOver)
-          .on("mouseout", handleMouseOut);
+    // Loop through each symbol / key
+    dataNest.forEach(function(d,i) { 
 
-      // On Click, we want to add data to the array and chart
-      svg.on("click", function() {
-          var coords = d3.mouse(this);
+        svg.append("path")
+            .attr("class", "line")
+            .style("stroke", function() { // Add the colours dynamically
+                return d.color = color(d.key); })
+            .attr("d", priceline(d.values));
 
-          // Normally we go from data to pixels, but here we're doing pixels to data
-          var newData= {
-            x: Math.round( xScale.invert(coords[0])),  // Takes the pixel number to convert to number
-            y: Math.round( yScale.invert(coords[1]))
-          };
+        // Add the Legend
+        svg.append("text")
+            .attr("x", (legendSpace/2)+i*legendSpace)  // space legend
+            .attr("y", height + (margin.bottom/2)+ 5)
+            .attr("class", "legend")    // style the legend
+            .style("fill", function() { // Add the colours dynamically
+                return d.color = color(d.key); })
+            .text(d.key); 
 
-          dataset.push(newData);   // Push data to our array
+    });
 
-          svg.selectAll("circle")  // For new circle, go through the update process
-            .data(dataset)
-            .enter()
-            .append("circle")
-            .attr(circleAttrs)  // Get attributes from circleAttrs var
-            .on("mouseover", handleMouseOver)
-            .on("mouseout", handleMouseOut);
-        })
+  // Add the X Axis
+  svg.append("g")
+      .attr("class", "axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
 
-      // Create Event Handlers for mouse
-      function handleMouseOver(d, i) {  // Add interactivity
+  // Add the Y Axis
+  svg.append("g")
+      .attr("class", "axis")
+      .call(d3.axisLeft(y));
 
-            // Use D3 to select element, change color and size
-            d3.select(this).attr({
-              fill: "orange",
-              r: radius * 2
-            });
+});
 
-            // Specify where to put label of text
-            svg.append("text").attr({
-               id: "t" + d.x + "-" + d.y + "-" + i,  // Create an id for text so we can select it later for removing on mouseout
-                x: function() { return xScale(d.x) - 30; },
-                y: function() { return yScale(d.y) - 15; }
-            })
-            .text(function() {
-              return [d.x, d.y];  // Value of the text
-            });
-          }
-
-      function handleMouseOut(d, i) {
-            // Use D3 to select element, change color back to normal
-            d3.select(this).attr({
-              fill: "black",
-              r: radius
-            });
-
-            // Select text by id and then remove
-            d3.select("#t" + d.x + "-" + d.y + "-" + i).remove();  // Remove text location
-          }
-
-    </script>
-  </body>
-</html>
-
-LICENSE
-#
-This block appears to have no license. Please contact the author to request a license.
+</script>
+</body>
